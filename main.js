@@ -1,34 +1,40 @@
 let keyTrainer ={
 chars: ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm'],
-charCount: null,
-task: [],
+charCount: '',
+task: '',
 userInput: [],
 userErrors : null,
-setCharCount: function() {
-    return this.charCount = keyTrainer.checkPositiveInteger(prompt('Кол-во символов: '));
-   
-},
-    
-    checkPositiveInteger: function(number) {
-		while(true){
-			if (parseInt(number) > 0 && Number.isInteger(parseInt(number))) {
-				return parseInt(number);
-			} else if (number == null ) {
-				return;
-			} else {
-				alert('Введите целое, положительное число')
-				return keyTrainer.checkPositiveInteger(prompt('Кол-во символов: '));
-			}
-		}
-    }, 
-createTask: function(){
-    let arr = [];
-    for (let i = 0; i < this.charCount; i++){
-        this.task.push(this.chars[Math.floor(Math.random() * (this.chars.length - 0))]);
+    setCharCount: function() {
+      let num;
+      while(true){
+        num = prompt("Вам нужно ввести число: ");
+     if (num === null) return;
+     if(this.checkPositiveInteger(+num)) break;
     }
+    this.charCount = +num;
+},
+    checkPositiveInteger: function(a) {
+      if((Number.isInteger(a)) && a > 0){ 
+        return true;
+      }
+    },
+createTask: function(){
+    if (this.charCount === null){
+        return ; 
+    } else {
+    let arr = new Array(this.charCount);
+    for (let i = 0; i < this.charCount; i++){
+        arr[i] = this.chars[Math.floor(Math.random() * (this.chars.length ))];
+    }
+    this.task = arr;
+}
 },
 startTask: function() {
-    this.userInput = prompt('Введите ' + this.task + ' :', '');
+    let entersymb = prompt('Введите ' + this.task.join(''));
+    if (entersymb === null) 
+        return;
+    this.userInput = entersymb.split('');
+    
     for (let i = 0; i < this.userInput.length; i++) {
         if (this.userInput[i] !== this.task[i]) {
             this.userErrors++
@@ -43,12 +49,13 @@ startTask: function() {
 
 
 };
-function run() {
-	keyTrainer.setCharCount();
-	keyTrainer.createTask();
-	keyTrainer.startTask();
+const run = function(obj) {
+    obj.setCharCount();
+    if (obj.charCount === "") return
+	obj.createTask();
+	obj.startTask();
 }
-run();
+run(keyTrainer);
 
 
 
